@@ -1,4 +1,4 @@
-This is the code for the 'React, Redux, and Redux Saga With Symfony 3' series at CodeReviewVideos.com:
+This is the code for the 'React, Redux, and Redux Saga With node' series at CodeReviewVideos.com:
 
 https://codereviewvideos.com/course/react-redux-and-redux-saga-with-symfony-3
 
@@ -8,7 +8,7 @@ Whilst having an API for these features is nice, it's a little much to expect th
 
 You are, of course, free to use pretty much any technology stack you desire to do this. My personal favourite front end stack is React, with Redux for managing application state, and Redux Sagas for managing side effects.
 
-Whilst I fully understand the frustrations and reluctance to continually learn all the new shiny things released in the JavaScript community, the tech stack in this series is, in my opinion, a fairly solid foundation for the next few years in real-world JavaScript projects. I say this with some confidence as I personally work with enterprise clients moving to React / Redux / Redux Sagas.
+Whilst I fully understand the frustratFions and reluctance to continually learn all the new shiny things released in the JavaScript community, the tech stack in this series is, in my opinion, a fairly solid foundation for the next few years in real-world JavaScript projects. I say this with some confidence as I personally work with enterprise clients moving to React / Redux / Redux Sagas.
 
 The application we are going to build in this series can serve as the basis for many applications - from side projects, to SaaS apps, to many other kinds of web applications.
 
