@@ -4,10 +4,10 @@ import Navbar from "../components/Navbar";
 import { Route, Switch } from "react-router-dom";
 import SignIn from "../containers/SignIn";
 import SignUp from "../containers/SignUp";
-import NotFoundPage from "../components/NotFoundPage";
+import NotFoundPage from "../containers/NotFoundPage";
 import HomePage from "../components/HomePage";
 import {withStyles} from "@material-ui/core";
-import ProductTable from "../components/ProductTable";
+import ProductTable from "../containers/ProductTable";
 import UserPage from "../containers/UserPage";
 
 import { connectedReduxRedirect } from 'redux-auth-wrapper/history4/redirect'

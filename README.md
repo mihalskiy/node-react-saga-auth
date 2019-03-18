@@ -1,5 +1,4 @@
-# This repo houses code for search the crud auth token  (using Sequelize and PostgreSQL)"
-
+# This repo houses code for auth by token and crud on react redux-saga (using Sequelize and PostgreSQL)"
 
 If you dont have install  node-js, please go this link [https://nodejs.org](https://nodejs.org)
 

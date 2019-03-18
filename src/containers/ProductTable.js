@@ -2,7 +2,7 @@ import React from 'react';
 import {bindActionCreators, compose} from "redux";
 import {connect} from "react-redux";
 import {getProduct} from "../redux/product/product.action";
-import DataTable from "./DataTable";
+import DataTable from "../components/DataTable";
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     getProduct,
