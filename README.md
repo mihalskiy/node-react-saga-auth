@@ -12,42 +12,7 @@ Let's begin by installing Sequelize CLI package. ```npm install -g sequelize-cli
   
 ```sudo add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"```
 
-### Update and Install PostgreSQL 9.6:
-    
-```$xslt
-sudo apt-get update
-sudo apt-get install postgresql-9.6
-
-```
-
-### Default postgres super user and postgres database is created. You need to set a password for the postgres super user.
-
-```
-    ubuntu@:~$ sudo passwd postgres
-   Enter new UNIX password:****
-   Retype new UNIX password:****
-   passwd: password updated successfully
-   
-   ```
-   
-   ### If service is not started, you can start the PostgreSQL service.
-       
-``` sudo service postgresql start ```
-
-### Connect PostgreSQL server using postgres user:
-    
-``` 
-ubuntu@:~$ su postgres
-Password:****
- ```
-        
- ### Create a sample database:
-  
-  ```createdb database_name```
-  
-  ### Connect to that database:
-      
-``` psql -d database_name ```
+### Update and Install PostgreSQL on ubuntu 18.04, please go this link [https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04](digitalocean)
 
 
 # Config Setup
