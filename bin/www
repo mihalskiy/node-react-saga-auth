@@ -1,0 +1,14 @@
+const http = require('http');
+const fs  = require('fs');
+require('dotenv').config();
+const app = require('../server');
+
+const http_port = parseInt(process.env.HTTP_PORT, 10);
+
+const http_server = http.createServer(app);
+
+http_server.listen(http_port, () => {
+  console.log(`The server is running at localhost:${http_port}`);
+});
+
+
