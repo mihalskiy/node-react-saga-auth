@@ -16,6 +16,7 @@ module.exports = (app) => {
       order.list);
 
     app.post('/order',
+        verifyToken,
         order.create);
 
     app.post('/order/:id',

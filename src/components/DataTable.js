@@ -21,6 +21,9 @@ import AddIcon from '@material-ui/icons/Add';
 import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
+import {bindActionCreators, compose} from "redux";
+import {getProduct} from "../redux/product/product.action";
+import {connect} from "react-redux";
 
 
 function createData(id, name, email, phone, message, createdAt) {
@@ -228,6 +231,10 @@ const styles = theme => ({
     },
 });
 
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getProduct,
+}, dispatch)
+
 class DataTable extends React.Component {
     state = {
         order: 'asc',
@@ -240,21 +247,6 @@ class DataTable extends React.Component {
         isEdit: false,
         isDelete: false
     };
-
-    componentWillMount() {
-        this.props.data.forEach((itm) => {
-            this.state.data.push(
-                createData(
-                    itm.id,
-                    itm.name,
-                    itm.email,
-                    itm.phone,
-                    itm.message,
-                    itm.createdAt,
-                )
-            )
-        })
-    }
 
     handleRequestSort = (event, property) => {
         const orderBy = property;
@@ -307,6 +299,25 @@ class DataTable extends React.Component {
             id: id
         });
         console.log('id', id)
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.data !== this.props.data) {
+            this.state.data = [];
+            nextProps.data.data.forEach((itm) => {
+                this.state.data.push(
+                    createData(
+                        itm.id,
+                        itm.name,
+                        itm.email,
+                        itm.phone,
+                        itm.message,
+                        itm.createdAt,
+                    )
+                )
+            })
+
+        }
     }
 
 
@@ -395,4 +406,15 @@ DataTable.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(DataTable);
+const mapStateToProps = function (state) {
+    return {
+        data: state.product.result
+    }
+};
+
+export default compose(
+    withStyles(styles, {
+        name: 'AppFrame',
+    }),
+    connect(mapStateToProps, mapDispatchToProps),
+)(DataTable);

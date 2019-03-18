@@ -100,7 +100,7 @@ class EditProduct extends React.Component {
             id: this.props.id,
             data: this.state
         })
-        this.props.closeEditModal();
+        this.props.closeModal();
     }
 
     render() {

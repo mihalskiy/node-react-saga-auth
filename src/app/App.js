@@ -12,7 +12,6 @@ import UserPage from "../containers/UserPage";
 
 import { connectedReduxRedirect } from 'redux-auth-wrapper/history4/redirect'
 import { routerActions } from 'react-router-redux'
-import locationHelperBuilder from 'redux-auth-wrapper/history4/locationHelper'
 
 
 

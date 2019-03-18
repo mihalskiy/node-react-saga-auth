@@ -1,28 +1,27 @@
-import PortfolioAction from './auth.action';
+import actionTypes from './auth.action';
 import initialState from '../store/initialState';
 
 function reducer(state = initialState.auth, action = {}) {
     const { type = '', payload = {} } = action;
     switch (type) {
-        case PortfolioAction.USER_CREATE:
+        case actionTypes.USER_CREATE:
             return state.merge({
                 loading: true,
                 ...payload
             });
-        case PortfolioAction.USER_ENTER:
+        case actionTypes.USER_ENTER:
             return state.merge({
                 loading: true,
                 ...payload
             });
-        case PortfolioAction.USER_SUCCESS:
+        case actionTypes.USER_SUCCESS:
             return state.merge({
                 loading: true,
                 payload: {
-                    isRegister: false,
                     ...payload
                 }
         });
-        case PortfolioAction.USER_FAILED:
+        case actionTypes.USER_FAILED:
             return state.merge({
                 loading: true,
                 ...payload

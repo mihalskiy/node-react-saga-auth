@@ -61,6 +61,7 @@ class SignUp extends React.Component {
             email: '',
             password: '',
             s_password: '',
+            isRegister: false,
             validate: {
                 passwordState: false
             },
@@ -80,6 +81,19 @@ class SignUp extends React.Component {
                 validate: {
                     passwordState:true
                 }});
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+        if (nextProps.isRegister !== this.props.isRegister) {
+
+            if (nextProps.isRegister.payload.payload){
+                debugger
+                this.setState({
+                    isRegister: nextProps.isRegister.payload.payload.isRegister
+                })
+            }
         }
     }
 
@@ -104,8 +118,8 @@ class SignUp extends React.Component {
     }
 
     render() {
-        const { classes, isRegister } = this.props;
-        const { name, email, password, s_password, validate } = this.state;
+        const { classes } = this.props;
+        const { name, email, password, s_password, validate, isRegister } = this.state;
         return (
             <main className={classes.main}>
                 <CssBaseline />
@@ -217,7 +231,7 @@ SignUp.propTypes = {
 
 const mapStateToProps = function (state) {
     return {
-        isRegister: state.auth.isRegister,
+        isRegister: state.auth,
     }
 };
 

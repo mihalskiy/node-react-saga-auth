@@ -4,6 +4,7 @@ const apiUpadeteProduct =  process.env.PUBLIC_URL ?  process.env.PUBLIC_URL + '/
 const apiDestroyProduct =  process.env.PUBLIC_URL ?  process.env.PUBLIC_URL + '/order/destroy' : 'http://localhost:8080/order/destroy';
 
 function* insertNewProduct(payload) {
+    debugger
     let response =  fetch(apiCreateProduct, {
         method: 'POST',
         headers: {

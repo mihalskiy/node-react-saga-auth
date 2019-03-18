@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import {bindActionCreators} from "redux";
+import {bindActionCreators, compose} from "redux";
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {userEnter} from "../redux/auth/auth.action";
+import {userCreateFailed, userEnter} from "../redux/auth/auth.action";
 
 const styles = theme => ({
     main: {
@@ -47,7 +47,8 @@ const styles = theme => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-    userEnter
+    userEnter,
+    userCreateFailed
 }, dispatch);
 
 class SignIn extends React.Component {
@@ -78,7 +79,7 @@ class SignIn extends React.Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, err } = this.props;
         const { email, password } = this.state;
         return (
             <main className={classes.main}>
@@ -115,6 +116,11 @@ class SignIn extends React.Component {
                                 value={ password }
                                 onChange={ (e) => this.handleChange(e) }
                             />
+                            { err && err.e &&
+                            <React.Fragment>
+                                <h6 color={'primary'} >SOMETHING ERROR</h6>
+                            </React.Fragment>
+                            }
                         </FormControl>
                         <Button
                             type="submit"
@@ -137,12 +143,15 @@ SignIn.propTypes = {
 };
 
 const mapStateToProps = function (state) {
+    debugger
     return {
-
+        err: state.auth.payload
     }
 };
 
-SignIn = connect(mapStateToProps, mapDispatchToProps)(SignIn);
-
-
-export default withStyles(styles)(SignIn);
+export default compose(
+    withStyles(styles, {
+        name: 'AppFrame',
+    }),
+    connect(mapStateToProps, mapDispatchToProps),
+)(SignIn);

@@ -15,13 +15,15 @@ function* postNewUser(params) {
                 isRegister: true,
             }));
         } else {
-            yield put(userCreateFailed({
-                isRegister: false,
-            }));
+            yield put(userCreateFailed( {
+                e: 'error'
+            }))
         }
 
     } else {
-        yield put({ type: actionTypes.USER_FAILED, confirmPassword: false });
+        yield put(userCreateFailed( {
+            e: 'err'
+        }));
         console.error(`Error is : ${params}`);
     }
 }
@@ -29,28 +31,34 @@ function* postNewUser(params) {
 function* postEnterUser(params) {
     try {
         const result = yield Api.loginUser(params);
+        debugger
 
         if (result.ok !== undefined) {
             yield put(userCreateSuccess({
                 isAuth: result.ok
             }));
 
-            //document.location.reload(true);
-            //window.location.replace( '/');
         } else {
             yield put(userCreateFailed({
                 isAuth: false
             }));
         }
     } catch (e) {
-        yield put({ type: actionTypes.USER_FAILED, e });
+        yield put(userCreateFailed( {
+            e
+        }))
         console.error(`Error is : ${e}`);
     }
+}
+
+function err() {
+
 }
 
 function* actionWatcher() {
     yield takeLatest(actionTypes.USER_CREATE, postNewUser);
     yield takeLatest(actionTypes.USER_ENTER, postEnterUser);
+    yield takeLatest(actionTypes.USER_FAILED, err);
 }
 
 function* Watcher() {

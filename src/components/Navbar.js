@@ -72,7 +72,6 @@ function RenderPropsMenu(classes) {
                         </Button>
                         <Menu id="render-props-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
                             <MenuItem component={User}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
                     </React.Fragment>
@@ -132,7 +131,6 @@ Navbar.propTypes = {
 };
 
 const mapStateToProps = function (state) {
-    console.log(localStorage.getItem('isAuth'))
     return {
         isAuth: state.auth.isAuth
     }

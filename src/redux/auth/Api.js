@@ -17,8 +17,6 @@ function* insertNewUser(payload) {
             if(data.token) {
                 localStorage.clear()
                 localStorage.setItem('token', data.token)
-                document.location.reload(true);
-                window.location.replace( '/login');
             }
         })
         .catch((e) => {
@@ -48,7 +46,7 @@ function* loginUser(payload) {
                 localStorage.setItem('token', data.token)
                 localStorage.setItem('isAuth', data.auth)
                 document.location.reload(true);
-                window.location.replace( '/');
+                window.location.replace( '/product');
             }
         })
         .catch((e) => {

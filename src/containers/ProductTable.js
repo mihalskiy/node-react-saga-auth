@@ -19,14 +19,7 @@ class ProductTable extends React.Component {
 
             <div>
 
-                { data &&
-                        <DataTable data={data.data} />
-                }
-                { !data &&
-                    <div>
-                        <p>loading</p>
-                    </div>
-                }
+                <DataTable />
 
             </div>
 
@@ -35,6 +28,7 @@ class ProductTable extends React.Component {
 }
 
 const mapStateToProps = function (state) {
+    debugger
     return {
         data: state.product.result
     }

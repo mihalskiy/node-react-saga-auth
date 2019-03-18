@@ -22,10 +22,7 @@ function* postProductSaga(payload) {
     try {
         const result = yield Api.insertNewProduct(payload);
         if (result.ok) {
-            document.location.reload(true);
-            yield put(getProductSuccess({
-                result
-            }));
+            yield put({ type: actionTypes.GET_PRODUCT });
         }
     } catch (e) {
         yield put({ type: actionTypes.GET_PRODUCT_FAILED, e });
@@ -37,10 +34,7 @@ function* editProductSaga(payload) {
     try {
         const result = yield Api.updateProduct(payload);
         if (result.ok) {
-            document.location.reload(true);
-            yield put(getProductSuccess({
-                result
-            }));
+            yield put({ type: actionTypes.GET_PRODUCT });
         }
     } catch (e) {
         yield put({ type: actionTypes.GET_PRODUCT_FAILED, e });
@@ -52,10 +46,7 @@ function* deleteProductSaga(payload) {
     try {
         const result = yield Api.deleteProduct(payload);
         if (result.ok) {
-            document.location.reload(true);
-            yield put(getProductSuccess({
-                result
-            }));
+            yield put({ type: actionTypes.GET_PRODUCT });
         }
     } catch (e) {
         yield put({ type: actionTypes.GET_PRODUCT_FAILED, e });
