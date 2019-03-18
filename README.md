@@ -1,68 +1,82 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# This repo houses code for search the crud auth token  (using Sequelize and PostgreSQL)"
 
-## Available Scripts
 
-In the project directory, you can run:
+If you dont have install  node-js, please go this link [https://nodejs.org](https://nodejs.org)
 
-### `npm start`
+# Sequelize Setup
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Let's begin by installing Sequelize CLI package. ```npm install -g sequelize-cli```
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+# PostgreSQL Setup for LINUX 
 
-### `npm test`
+### You need to add the latest PostgreSQL repository for the latest version.
+  
+```sudo add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Update and Install PostgreSQL 9.6:
+    
+```$xslt
+sudo apt-get update
+sudo apt-get install postgresql-9.6
 
-### `npm run build`
+```
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Default postgres super user and postgres database is created. You need to set a password for the postgres super user.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+```
+    ubuntu@:~$ sudo passwd postgres
+   Enter new UNIX password:****
+   Retype new UNIX password:****
+   passwd: password updated successfully
+   
+   ```
+   
+   ### If service is not started, you can start the PostgreSQL service.
+       
+``` sudo service postgresql start ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Connect PostgreSQL server using postgres user:
+    
+``` 
+ubuntu@:~$ su postgres
+Password:****
+ ```
+        
+ ### Create a sample database:
+  
+  ```createdb database_name```
+  
+  ### Connect to that database:
+      
+``` psql -d database_name ```
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+# Config Setup
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### go to directory /you_project/server/config and open file config.json and change settings under your database
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```$xslt
+{
+  "development": {
+    "username": "you_DATABASE_username",
+    "password": "you_DATABASE_password",
+    "database": "you_DATABASE_name",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "dialect": "postgres"
+  },
+}
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+# Project Setup
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. Use command  ```npm install``` for install dependices
+2. Now try running the migrate ```npm run migrate```
+3. Now try running the application server ```npm run server```
+and visiting [http://localhost:8000](http://localhost:8000). 
+3. Running the client to do this, we run the following command:  ```npm run client```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Have fun! smile
 
-### Code Splitting
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
