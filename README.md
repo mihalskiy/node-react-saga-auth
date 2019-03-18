@@ -12,7 +12,7 @@ Let's begin by installing Sequelize CLI package. ```npm install -g sequelize-cli
   
 ```sudo add-apt-repository "deb https://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"```
 
-### Update and Install PostgreSQL on ubuntu 18.04, please go this link [https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04](digitalocean)
+### Update and Install PostgreSQL on ubuntu 18.04, please go this link [install-and-use-postgresql](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04)
 
 
 # Config Setup
