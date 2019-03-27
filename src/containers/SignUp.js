@@ -87,10 +87,9 @@ class SignUp extends React.Component {
     componentWillReceiveProps(nextProps) {
 
         if (nextProps.isRegister !== this.props.isRegister) {
-
-            if (nextProps.isRegister.payload.payload){
+            if (nextProps.isRegister.data){
                 this.setState({
-                    isRegister: nextProps.isRegister.payload.payload.isRegister
+                    isRegister: nextProps.isRegister.data
                 })
             }
         }

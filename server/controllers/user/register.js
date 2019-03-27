@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
     password,
     name,
     s_password,
-  } = req.body.payload;
+  } = req.body;
 
   if (!name || !password || !email || !s_password) {
     return res

@@ -299,7 +299,6 @@ class DataTable extends React.Component {
             id: id,
             dataById: data
         });
-        console.log('id', id)
     }
 
     componentWillReceiveProps(nextProps) {

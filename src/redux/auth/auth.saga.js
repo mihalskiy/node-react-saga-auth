@@ -3,7 +3,7 @@ import actionTypes, {userCreateSuccess, userCreateFailed} from "./auth.action";
 import {Api} from "./Api";
 
 function* postNewUser(params) {
-    const {password, s_password} = params.payload.payload;
+    const {password, s_password} = params.payload.data;
 
     if (password === s_password) {
         yield Api.insertNewUser(params)
