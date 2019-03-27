@@ -19,8 +19,6 @@ module.exports = async (req, res) => {
       .send('Fields [s_password, email, password] are required');
   }
   const hashedPassword = bcrypt.hashSync(password, 8);
-  console.log('clearedPhoneNumber111', hashedPassword);
-
 
   let user;
   try {
@@ -29,7 +27,6 @@ module.exports = async (req, res) => {
         email,
       },
     });
-    console.log(user);
   } catch (error) {
     console.error(error);
     return res

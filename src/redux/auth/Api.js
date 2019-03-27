@@ -1,63 +1,48 @@
 const apiInsertNewUser =  process.env.PUBLIC_URL ? process.env.PUBLIC_URL + '/sign-up' : 'http://localhost:8080/sign-up';
 const apiEnterUser =  process.env.PUBLIC_URL ? process.env.PUBLIC_URL + '/sign-in' :'http://localhost:8080/sign-in';
 
-function* insertNewUser(payload) {
-    let response =  fetch(apiInsertNewUser, {
+const  insertNewUser = async user => {
+    try {
+        const config = {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(payload.payload)
-        })
-        .then(function (data) {
-            return data.json();
-        })
-        .then(function (data) {
-            if(data.token) {
-                localStorage.clear()
-                localStorage.setItem('token', data.token)
-            }
-        })
-        .catch((e) => {
-            localStorage.clear()
-            console.error(`Error is : ${e}`);
-        })
-    yield console.log(`response = ${JSON.stringify(response)}`);
-    return yield response;
+            body: JSON.stringify(user.payload.data)
+        };
+
+        const response = await fetch(apiInsertNewUser, config);
+
+        if (response.ok) {
+            return response.json()
+        }
+
+    } catch (e) {
+        console.error(e)
+    }
 }
 
-function* loginUser(payload) {
-    try {
-        let response =  fetch(apiEnterUser, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(payload.payload.payload)
-        })
-        .then(function (data) {
-            return data.json();
-        })
-        .then(function (data) {
-            if(data.token) {
-                localStorage.clear()
-                localStorage.setItem('token', data.token)
-                localStorage.setItem('isAuth', data.auth)
-                document.location.reload(true);
-                window.location.replace( '/product');
+const loginUser = async user => {
+        try {
+            const config = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(user.payload.data)
+            };
+
+            const response = await fetch(apiEnterUser, config);
+
+            if (response.ok) {
+                return response.json()
             }
-        })
-        .catch((e) => {
-            localStorage.clear()
-            console.error(`Error is : ${e}`);
-        })
-        yield console.log(`response = ${JSON.stringify(response)}`);
-        return yield response;
-    } catch (error) {
-        console.error(`Error is : ${error}`);
-    }
+
+        } catch (e) {
+            console.error(e)
+        }
 }
 
 export const Api = {

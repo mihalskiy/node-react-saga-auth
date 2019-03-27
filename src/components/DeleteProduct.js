@@ -80,19 +80,17 @@ class DeleteProduct extends React.Component {
     }
 
     componentWillMount() {
-        const { data } = this.props;
+        const { dataById } = this.props;
         this.setState({
-            name: data[0].name,
-            email: data[0].email,
-            phone: data[0].phone,
-            message: data[0].message,
+            name: dataById.name,
+            email: dataById.email,
+            phone: dataById.phone,
+            message: dataById.message,
         })
     }
 
     submitForm(e) {
         e.preventDefault();
-        console.log(`Email: ${ this.state.email }`)
-
         this.props.deleteProduct(this.props.id)
         this.props.closeModal();
     }

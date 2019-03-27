@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import {userCreateFailed, userEnter} from "../redux/auth/auth.action";
+import {userCreateFailed, userEnter, userCreateSuccess} from "../redux/auth/auth.action";
 
 const styles = theme => ({
     main: {
@@ -48,6 +48,7 @@ const styles = theme => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     userEnter,
+    userCreateSuccess,
     userCreateFailed
 }, dispatch);
 
@@ -58,7 +59,7 @@ class SignIn extends React.Component {
         this.state = {
             'email': '',
             'password': '',
-        }
+        };
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -71,10 +72,22 @@ class SignIn extends React.Component {
         });
     }
 
+    componentWillReceiveProps(nextProps, nextContext) {
+
+        if(nextProps.successAuth !== nextContext.successAuth){
+            const { token } = nextProps.successAuth.data;
+            const { isAuth } = nextProps.successAuth.data;
+            localStorage.setItem('token', token);
+            localStorage.setItem('isAuth', isAuth);
+            window.location.replace( '/product');
+        }
+
+
+
+    }
+
     submitForm(e) {
         e.preventDefault();
-        console.log(`Email: ${ this.state.email }`)
-
         this.props.userEnter(this.state)
     }
 
@@ -143,9 +156,9 @@ SignIn.propTypes = {
 };
 
 const mapStateToProps = function (state) {
-    debugger
     return {
-        err: state.auth.payload
+        err: state.auth.payload,
+        successAuth: state.auth.payload,
     }
 };
 

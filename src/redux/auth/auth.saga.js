@@ -31,34 +31,20 @@ function* postNewUser(params) {
 function* postEnterUser(params) {
     try {
         const result = yield Api.loginUser(params);
-        debugger
 
-        if (result.ok !== undefined) {
-            yield put(userCreateSuccess({
-                isAuth: result.ok
-            }));
+        yield put(userCreateSuccess({
+            isAuth: result.auth,
+            token: result.token
+        }));
 
-        } else {
-            yield put(userCreateFailed({
-                isAuth: false
-            }));
-        }
-    } catch (e) {
-        yield put(userCreateFailed( {
-            e
-        }))
-        console.error(`Error is : ${e}`);
+    } catch (error) {
+        yield put({ type: actionTypes.USER_FAILED, error });
     }
-}
-
-function err() {
-
 }
 
 function* actionWatcher() {
     yield takeLatest(actionTypes.USER_CREATE, postNewUser);
     yield takeLatest(actionTypes.USER_ENTER, postEnterUser);
-    yield takeLatest(actionTypes.USER_FAILED, err);
 }
 
 function* Watcher() {

@@ -5,13 +5,14 @@ import {Api} from "../product/Api";
 
 function* getProductSaga() {
     try {
-        const result = yield Api.getProduct();
+        const result = yield Api.getProducts();
 
-        if (result.data) {
+        if (result) {
             yield put(getProductSuccess({
                 result
             }));
         }
+
     } catch (e) {
         yield put({ type: actionTypes.GET_PRODUCT_FAILED, e });
         console.error(`Error is : ${e}`);

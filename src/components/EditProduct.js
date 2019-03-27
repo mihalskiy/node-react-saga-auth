@@ -55,11 +55,6 @@ const styles = theme => ({
     },
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-    editProduct,
-    getIDProduct
-}, dispatch);
-
 class EditProduct extends React.Component {
 
     constructor(props) {
@@ -83,19 +78,17 @@ class EditProduct extends React.Component {
     }
 
     componentWillMount() {
-        const { data } = this.props;
+        const { dataById } = this.props;
         this.setState({
-            name: data[0].name,
-            email: data[0].email,
-            phone: data[0].phone,
-            message: data[0].message,
+            name: dataById.name,
+            email: dataById.email,
+            phone: dataById.phone,
+            message: dataById.message,
         })
     }
 
     submitForm(e) {
         e.preventDefault();
-        console.log(`Email: ${ this.state.email }`)
-
         this.props.editProduct({
             id: this.props.id,
             data: this.state
@@ -210,15 +203,4 @@ EditProduct.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = function (state) {
-    return {
-        //data: state.product.result.data,
-    }
-};
-
-export default compose(
-    withStyles(styles, {
-        name: 'AppFrame',
-    }),
-    connect(mapStateToProps, mapDispatchToProps),
-)(EditProduct);
+export default withStyles(styles)(EditProduct);

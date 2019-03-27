@@ -13,22 +13,15 @@ class ProductTable extends React.Component {
     }
 
     render() {
-        const { data } = this.props;
-
         return (
-
-            <div>
-
+            <React.Fragment>
                 <DataTable />
-
-            </div>
-
+            </React.Fragment>
         );
     }
 }
 
 const mapStateToProps = function (state) {
-    debugger
     return {
         data: state.product.result
     }

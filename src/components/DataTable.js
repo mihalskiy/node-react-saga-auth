@@ -70,7 +70,7 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
+    { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
     { id: 'email', numeric: true, disablePadding: false, label: 'Email' },
     { id: 'phone', numeric: true, disablePadding: false, label: 'Phone' },
     { id: 'message', numeric: true, disablePadding: false, label: 'Message' },
@@ -192,7 +192,7 @@ let EnhancedTableToolbar = props => {
                                 onClose={props.closeModal}
                             >
                                 <div style={getModalStyle()} className={classes.paper}>
-                                    <EditProduct id={props.id} data={props.data} closeModal={props.closeModal}/>
+                                    <EditProduct id={props.id} dataById={props.dataById} closeModal={props.closeModal}/>
                                 </div>
                             </Modal>
                             <Modal
@@ -202,7 +202,7 @@ let EnhancedTableToolbar = props => {
                                 onClose={props.closeDeleteModal}
                             >
                                 <div style={getModalStyle()} className={classes.paper}>
-                                    <DeleteProduct id={props.id} data={props.data} closeModal={props.closeModal}/>
+                                    <DeleteProduct id={props.id} dataById={props.dataById} closeModal={props.closeModal}/>
                                 </div>
                             </Modal>
                         </div>
@@ -243,6 +243,7 @@ class DataTable extends React.Component {
         page: 0,
         rowsPerPage: 5,
         id: null,
+        dataById: null,
         isAdd: false,
         isEdit: false,
         isDelete: false
@@ -285,18 +286,18 @@ class DataTable extends React.Component {
         });
     };
 
-    editProduct = (e, id) => {
+    editProduct = (e, data) => {
         this.setState({
             isEdit: true,
-            id: id
+            dataById: data
         });
-        console.log('id', id)
     };
 
-    deleteProduct = (e, id) => {
+    deleteProduct = (e, id, data) => {
         this.setState({
             isDelete: true,
-            id: id
+            id: id,
+            dataById: data
         });
         console.log('id', id)
     }
@@ -304,7 +305,7 @@ class DataTable extends React.Component {
     componentWillReceiveProps(nextProps) {
         if(nextProps.data !== this.props.data) {
             this.state.data = [];
-            nextProps.data.data.forEach((itm) => {
+            nextProps.data.forEach((itm) => {
                 this.state.data.push(
                     createData(
                         itm.id,
@@ -323,7 +324,7 @@ class DataTable extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { data, order, isAdd, orderBy, rowsPerPage, page, isEdit,isDelete, id } = this.state;
+        const { data, dataById, order, isAdd, orderBy, rowsPerPage, page, isEdit,isDelete, id } = this.state;
         const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
         return (
@@ -334,7 +335,7 @@ class DataTable extends React.Component {
                     isDelete={isDelete}
                     id={id}
                     data={data}
-                    //closeEditModal={this.closeEditModal}
+                    dataById={dataById}
                     closeModal={this.closeModal}
                     handleAddModal={this.handleAddModal} />
                 <div className={classes.tableWrapper}>
@@ -357,12 +358,12 @@ class DataTable extends React.Component {
                                             key={n.id}
                                         >
                                             <TableCell padding="checkbox">
-                                                <IconButton aria-label="Edit Product" onClick={event => this.editProduct(event, n.id)}>
+                                                <IconButton aria-label="Edit Product" onClick={event => this.editProduct(event, n)}>
                                                     <EditIcon color={'primary'} />
                                                 </IconButton>
 
 
-                                                <IconButton aria-label="Delete Product" onClick={event => this.deleteProduct(event, n.id)}>
+                                                <IconButton aria-label="Delete Product" onClick={event => this.deleteProduct(event, n.id, n)}>
                                                     <DeleteIcon color={'secondary'} />
                                                 </IconButton>
                                             </TableCell>

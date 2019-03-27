@@ -3,9 +3,8 @@ const apiCreateProduct =  process.env.PUBLIC_URL ?  process.env.PUBLIC_URL + '/o
 const apiUpadeteProduct =  process.env.PUBLIC_URL ?  process.env.PUBLIC_URL + '/order' : 'http://localhost:8080/order';
 const apiDestroyProduct =  process.env.PUBLIC_URL ?  process.env.PUBLIC_URL + '/order/destroy' : 'http://localhost:8080/order/destroy';
 
-function* insertNewProduct(payload) {
-    debugger
-    let response =  fetch(apiCreateProduct, {
+const insertNewProduct = payload => {
+    return  fetch(apiCreateProduct, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -14,12 +13,10 @@ function* insertNewProduct(payload) {
         },
         body: JSON.stringify(payload.payload)
     });
-    yield console.log(`response = ${JSON.stringify(response)}`);
-    return yield response;
-}
+};
 
-function* updateProduct(payload) {
-    let response =  fetch(apiUpadeteProduct + '/' + payload.payload.id, {
+const updateProduct = payload => {
+    return  fetch(apiUpadeteProduct + '/' + payload.payload.id, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -28,45 +25,31 @@ function* updateProduct(payload) {
         },
         body: JSON.stringify(payload.payload.data)
     });
-    yield console.log(`response = ${JSON.stringify(response)}`);
-    return yield response;
 }
 
-function* deleteProduct(payload) {
-    let response =  fetch(apiDestroyProduct + '/' + payload.payload, {
+const deleteProduct = payload => {
+    return fetch(apiDestroyProduct + '/' + payload.payload, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': localStorage.getItem('token')
         }
-    });
-    yield console.log(`response = ${JSON.stringify(response)}`);
-    return yield response;
+    })
 }
 
-async function getByIdProduct(payload) {
-    let response =  fetch(apiUpadeteProduct + '/' + payload.payload.id, {
+ const getByIdProduct = async payload => {
+     return  await fetch(apiUpadeteProduct + '/' + payload.payload.id, {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': localStorage.getItem('token')
         }
-    })
-        .then((res) => {
-            return res.json();
-        })
-        .then((data) => {
-            return data
-        });
-
-    return await {
-        data: response
-    }
+    });
 }
 
-async function getProduct() {
+const getProducts = async () => {
     try {
         let response = await fetch(apiGetProducts, {
             method: 'GET',
@@ -80,16 +63,7 @@ async function getProduct() {
             }
 
         })
-            .then((res) => {
-                return res.json();
-            })
-            .then((data) => {
-                return data
-            })
-
-        return await {
-            data: response
-        }
+        return await response.status === 200 ? response.json() : ['null'];
 
     } catch (error) {
         console.error(`Error is : ${error}`);
@@ -98,7 +72,7 @@ async function getProduct() {
 
 
 export const Api = {
-    getProduct,
+    getProducts,
     updateProduct,
     insertNewProduct,
     getByIdProduct,

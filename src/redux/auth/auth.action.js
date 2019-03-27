@@ -17,7 +17,7 @@ export const userCreate = (payload) => {
         type: USER_CREATE,
         loading: false,
          payload: {
-             payload
+             data: payload
          }
     }
 };
@@ -27,7 +27,7 @@ export const userEnter = (payload) => {
         type: USER_ENTER,
         loading: false,
          payload: {
-             payload
+             data: payload
          }
     }
 };
@@ -37,7 +37,7 @@ export const userCreateSuccess = (payload) => {
         type: USER_SUCCESS,
         loading: false,
          payload: {
-             payload
+            data: payload
          }
     }
 };

@@ -89,7 +89,6 @@ class SignUp extends React.Component {
         if (nextProps.isRegister !== this.props.isRegister) {
 
             if (nextProps.isRegister.payload.payload){
-                debugger
                 this.setState({
                     isRegister: nextProps.isRegister.payload.payload.isRegister
                 })
@@ -107,7 +106,6 @@ class SignUp extends React.Component {
         if (target.name === 'password' || target.name === 's_password') {
             this.checkPassword();
         }
-        console.log(this.state.validate)
     }
 
     submitForm(e) {

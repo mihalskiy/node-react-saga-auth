@@ -81,8 +81,6 @@ class AddProduct extends React.Component {
 
     submitForm(e) {
         e.preventDefault();
-        console.log(`Email: ${ this.state.email }`)
-
         this.props.postProduct(this.state)
         this.props.closeModal();
     }
