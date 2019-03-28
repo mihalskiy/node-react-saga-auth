@@ -28,7 +28,6 @@ const updateProduct = payload => {
 }
 
 const deleteProduct = payload => {
-    debugger
     return fetch(apiDestroyProduct + '/' + payload.payload, {
         method: 'POST',
         headers: {
