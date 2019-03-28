@@ -51,7 +51,7 @@ export const  postProduct = (payload) => {
 export const  editProduct = (payload) => {
     return {
         type: PUT_PRODUCT,
-        payload
+        data: payload
     }
 }
 

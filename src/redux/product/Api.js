@@ -16,18 +16,19 @@ const insertNewProduct = payload => {
 };
 
 const updateProduct = payload => {
-    return  fetch(apiUpadeteProduct + '/' + payload.payload.id, {
+    return  fetch(apiUpadeteProduct + '/' + payload.data.id, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization': localStorage.getItem('token')
         },
-        body: JSON.stringify(payload.payload.data)
+        body: JSON.stringify(payload.data.data)
     });
 }
 
 const deleteProduct = payload => {
+    debugger
     return fetch(apiDestroyProduct + '/' + payload.payload, {
         method: 'POST',
         headers: {

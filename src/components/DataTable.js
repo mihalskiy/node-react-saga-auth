@@ -22,7 +22,7 @@ import AddProduct from "./AddProduct";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
 import {bindActionCreators, compose} from "redux";
-import {getProduct} from "../redux/product/product.action";
+import {editProduct, getProduct} from "../redux/product/product.action";
 import {connect} from "react-redux";
 
 
@@ -233,6 +233,7 @@ const styles = theme => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
     getProduct,
+    editProduct
 }, dispatch)
 
 class DataTable extends React.Component {
@@ -286,9 +287,10 @@ class DataTable extends React.Component {
         });
     };
 
-    editProduct = (e, data) => {
+    editProduct = (e, id, data) => {
         this.setState({
             isEdit: true,
+            id: id,
             dataById: data
         });
     };
@@ -357,7 +359,7 @@ class DataTable extends React.Component {
                                             key={n.id}
                                         >
                                             <TableCell padding="checkbox">
-                                                <IconButton aria-label="Edit Product" onClick={event => this.editProduct(event, n)}>
+                                                <IconButton aria-label="Edit Product" onClick={event => this.editProduct(event, n.id, n)}>
                                                     <EditIcon color={'primary'} />
                                                 </IconButton>
 

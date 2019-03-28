@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {bindActionCreators, compose} from "redux";
 import {connect} from "react-redux";
-import {editProduct, getIDProduct} from "../redux/product/product.action";
+import {editProduct, getIDProduct, getProduct} from "../redux/product/product.action";
 import IconButton from "@material-ui/core/IconButton";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import Grid from "@material-ui/core/Grid";
@@ -54,6 +54,11 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 3,
     },
 });
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+    getProduct,
+    editProduct
+}, dispatch)
 
 class EditProduct extends React.Component {
 
@@ -203,4 +208,9 @@ EditProduct.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(EditProduct);
+export default compose(
+    withStyles(styles, {
+        name: 'AppFrame',
+    }),
+    connect(null, mapDispatchToProps),
+)(EditProduct);
