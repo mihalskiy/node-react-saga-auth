@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -52,151 +52,175 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     userCreate,
 }, dispatch);
 
+class SignUp extends React.Component {
 
-const SignUp = props => {
-    const initialFormState = {
-        name: '',
-        email: '',
-        password: '',
-        s_password: '',
-        validate:false,
-        isRegister: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+            email: '',
+            password: '',
+            s_password: '',
+            isRegister: false,
+            validate: {
+                passwordState: false
+            },
+        }
+        this.handleChange = this.handleChange.bind(this);
+    }
 
-    };
+    checkPassword() {
+        if(!this.state.password || this.state.password !== this.state.s_password) {
+            this.setState({
+            validate: {
+                passwordState:false
+            }});
+        }
+        else {
+            this.setState({
+                validate: {
+                    passwordState:true
+                }});
+        }
+    }
 
-    const [
-        signUp,
-        setSignUp
-    ] = useState(initialFormState);
+    componentWillReceiveProps(nextProps) {
 
-    // componentWillReceiveProps(nextProps) {
-    //
-    //     if (nextProps.isRegister !== this.props.isRegister) {
-    //         if (nextProps.isRegister.data){
-    //             this.setState({
-    //                 isRegister: nextProps.isRegister.data
-    //             })
-    //         }
-    //     }
-    // }
+        if (nextProps.isRegister !== this.props.isRegister) {
+            if (nextProps.isRegister.data){
+                this.setState({
+                    isRegister: nextProps.isRegister.data
+                })
+            }
+        }
+    }
 
-    function handleChange (event) {
-        const { currentTarget } = event;
-        const value = currentTarget.type === 'checkbox' ? currentTarget.checked : currentTarget.value;
-        const { name } = currentTarget;
-        setSignUp({
-            ...signUp,
-            [name]: value
+    handleChange = async (event) => {
+        const { target } = event;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const { name } = target;
+        await this.setState({
+            [ name ]: value,
         });
+        if (target.name === 'password' || target.name === 's_password') {
+            this.checkPassword();
+        }
     }
 
-    function submitForm(e) {
+    submitForm(e) {
         e.preventDefault();
-        if (!signUp.name || !signUp.email || !signUp.password) return;
+        console.log(`Email: ${ this.state.email }`)
 
-        props.userCreate(signUp)
+        this.props.userCreate(this.state)
     }
 
-    const {classes} = props;
+    render() {
+        const { classes } = this.props;
+        const { name, email, password, s_password, validate, isRegister } = this.state;
+        return (
+            <main className={classes.main}>
+                <CssBaseline />
 
-    return (
-        <main className={classes.main}>
-            <CssBaseline />
+                <Paper className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    { !isRegister &&
+                    <React.Fragment>
+                        <Typography component="h1" variant="h5">
+                            Sign Up
+                        </Typography>
+                        <form className={classes.form} onSubmit={ (e) => this.submitForm(e) }>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="email">Name</InputLabel>
+                                <Input
+                                    type="text"
+                                    name="name"
+                                    required={false}
+                                    autoComplete="off"
+                                    id="name"
+                                    placeholder="name"
+                                    value={ name }
+                                    onChange={ (e) => {
+                                        this.handleChange(e)
+                                    } }
+                                />
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="email">Email Address</InputLabel>
+                                <Input
+                                    type="text"
+                                    name="email"
+                                    required
+                                    autoComplete="off"
+                                    id="email"
+                                    placeholder="myemail@email.com"
+                                    value={ email }
+                                    onChange={ (e) => {
+                                        this.handleChange(e)
+                                    } }
+                                />
 
-            <Paper className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                { !signUp.isRegister &&
-                <React.Fragment>
-                    <Typography component="h1" variant="h5">
-                        Sign Up
-                    </Typography>
-                    <form className={classes.form} onSubmit={submitForm}>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email">Name</InputLabel>
-                            <Input
-                                type="text"
-                                name="name"
-                                required={false}
-                                autoComplete="off"
-                                id="name"
-                                placeholder="name"
-                                value={ signUp.name }
-                                onChange={handleChange}
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email">Email Address</InputLabel>
-                            <Input
-                                type="text"
-                                name="email"
-                                required
-                                autoComplete="off"
-                                id="email"
-                                placeholder="myemail@email.com"
-                                value={ signUp.email }
-                                onChange={handleChange}
-                            />
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="password">Password</InputLabel>
+                                <Input
+                                    type="password"
+                                    name="password"
+                                    id="examplePassword"
+                                    placeholder="********"
+                                    required
+                                    value={ password }
+                                    onChange={ (e) => this.handleChange(e) }
+                                />
+                            </FormControl>
 
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="password">Password</InputLabel>
-                            <Input
-                                type="password"
-                                name="password"
-                                id="examplePassword"
-                                placeholder="********"
-                                required
-                                value={ signUp.password }
-                                onChange={ handleChange }
-                            />
-                        </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="password">Confirm Password</InputLabel>
+                                <Input
+                                    type="password"
+                                    name="s_password"
+                                    id="s_password"
+                                    placeholder="********"
+                                    required
+                                    value={ s_password }
+                                    onChange={ (e) => this.handleChange(e) }
+                                />
+                                { !validate.passwordState && password &&
+                                <div>
+                                    Password need to mach
+                                </div>
+                                }
+                            </FormControl>
 
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="password">Confirm Password</InputLabel>
-                            <Input
-                                type="password"
-                                name="s_password"
-                                id="s_password"
-                                placeholder="********"
-                                required
-                                value={ signUp.s_password }
-                                onChange={ handleChange }
-                            />
-                            { signUp.password !== signUp.s_password &&
-                            <div>
-                                Password need to mach
-                            </div>
-                            }
-                        </FormControl>
-
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            Sign in
-                        </Button>
-                    </form>
-                </React.Fragment>
-                }
-                { signUp.isRegister &&
-                <React.Fragment>
-                    <Typography component="h1" variant="h5">
-                        Register success
-                    </Typography>
-                    <Link to="/login"> Go to login </Link>
-                </React.Fragment>
-                }
-            </Paper>
-        </main>
-    );
+                            <Button
+                                type="submit"
+                                fullWidth
+                                disabled={!validate.passwordState}
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Sign in
+                            </Button>
+                        </form>
+                    </React.Fragment>
+                    }
+                    { isRegister &&
+                    <React.Fragment>
+                        <Typography component="h1" variant="h5">
+                            Register success
+                        </Typography>
+                        <Link to="/login"> Go to login </Link>
+                    </React.Fragment>
+                    }
+                </Paper>
+            </main>
+        );
+    }
 
 
-};
+}
 
 SignUp.propTypes = {
     classes: PropTypes.object.isRequired,
