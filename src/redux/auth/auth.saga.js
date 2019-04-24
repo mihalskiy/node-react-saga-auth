@@ -4,27 +4,23 @@ import {Api} from "./Api";
 
 function* postNewUser(params) {
     const {password, s_password} = params.payload.data;
-
     if (password === s_password) {
-        yield Api.insertNewUser(params)
-
-        const data = localStorage.getItem('token');
-
-        if (data !== 'undefined') {
-            yield put(userCreateSuccess({
-                isRegister: true,
-            }));
-        } else {
-            yield put(userCreateFailed( {
-                e: 'error'
-            }))
-        }
-
+        Api.insertNewUser(params)
+        .then(function* (data) {
+            if (data !== 'undefined') {
+                yield put(userCreateSuccess({
+                    isRegister: true,
+                }));
+            } else {
+                yield put(userCreateFailed( {
+                    e: 'Error is post new user'
+                }))
+            }
+        })
     } else {
         yield put(userCreateFailed( {
-            e: 'err'
+            e: 'Error is password'
         }));
-        console.error(`Error is : ${params}`);
     }
 }
 
