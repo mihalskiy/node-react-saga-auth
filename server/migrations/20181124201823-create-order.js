@@ -17,6 +17,12 @@ module.exports = {
       phone: {
         type: Sequelize.STRING
       },
+      post_address: {
+        type: Sequelize.STRING
+      },
+      friends: {
+        type: Sequelize.STRING
+      },
       message: {
           type: Sequelize.STRING
       },
