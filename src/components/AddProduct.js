@@ -65,6 +65,7 @@ class AddProduct extends React.Component {
             name: '',
             email: '',
             phone: '',
+            postAddress: '',
             message: '',
         }
         this.handleChange = this.handleChange.bind(this);
@@ -83,11 +84,12 @@ class AddProduct extends React.Component {
         e.preventDefault();
         this.props.postProduct(this.state)
         this.props.closeModal();
+        console.log(this.state);
     }
 
     render() {
         const { classes } = this.props;
-        const { name, email, phone, message } = this.state;
+        const { name, email, phone, postAddress, message } = this.state;
         return (
             <main className={classes.main}>
                 <Grid className={classes.closeIcon}  alignItems="flex-end">
@@ -153,6 +155,19 @@ class AddProduct extends React.Component {
                                 placeholder="phone"
                                 required
                                 value={ phone }
+                                onChange={ (e) => this.handleChange(e) }
+                            />
+                        </FormControl>
+
+                        <FormControl margin="normal" fullWidth>
+                            <InputLabel htmlFor="password">Post Address</InputLabel>
+                            <Input
+                                type="text"
+                                name="postAddress"
+                                id="postAddress"
+                                placeholder="postAddress"
+                                required
+                                value={ postAddress }
                                 onChange={ (e) => this.handleChange(e) }
                             />
                         </FormControl>

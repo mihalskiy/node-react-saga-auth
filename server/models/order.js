@@ -3,8 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     phone: DataTypes.STRING,
-    friends: DataTypes.STRING,
-    post_address: DataTypes.STRING,
+    postAddress: DataTypes.STRING,
     message: DataTypes.STRING
   });
   return Orders;

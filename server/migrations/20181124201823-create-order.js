@@ -17,10 +17,7 @@ module.exports = {
       phone: {
         type: Sequelize.STRING
       },
-      post_address: {
-        type: Sequelize.STRING
-      },
-      friends: {
+      postAddress: {
         type: Sequelize.STRING
       },
       message: {

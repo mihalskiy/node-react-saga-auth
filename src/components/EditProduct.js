@@ -68,6 +68,7 @@ class EditProduct extends React.Component {
             name: '',
             email: '',
             phone: '',
+            postAddress: '',
             message: '',
         }
         this.handleChange = this.handleChange.bind(this);
@@ -88,6 +89,7 @@ class EditProduct extends React.Component {
             name: dataById.name,
             email: dataById.email,
             phone: dataById.phone,
+            postAddress: dataById.postAddress,
             message: dataById.message,
         })
     }
@@ -103,7 +105,7 @@ class EditProduct extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { name, email, phone, message } = this.state;
+        const { name, email, phone, postAddress, message } = this.state;
         return (
             <main className={classes.main}>
                 <Grid className={classes.closeIcon}  alignItems="flex-end">
@@ -174,6 +176,17 @@ class EditProduct extends React.Component {
                         </FormControl>
 
                         <FormControl margin="normal" fullWidth>
+                            <InputLabel htmlFor="password">Post Address</InputLabel>
+                            <Input
+                                type="text"
+                                name="postAddress"
+                                id="postAddress"
+                                placeholder="postAddress"
+                                required
+                                value={ postAddress }
+                                onChange={ (e) => this.handleChange(e) }
+                            />
+                        </FormControl><FormControl margin="normal" fullWidth>
                             <InputLabel htmlFor="password">Message</InputLabel>
                             <Input
                                 type="text"

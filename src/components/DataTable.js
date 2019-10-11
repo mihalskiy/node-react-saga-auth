@@ -26,8 +26,8 @@ import {editProduct, getProduct} from "../redux/product/product.action";
 import {connect} from "react-redux";
 
 
-function createData(id, name, email, phone, message, createdAt) {
-    return { id, name, email, phone, message, createdAt };
+function createData(id, name, email, phone, postAddress, message, createdAt) {
+    return { id, name, email, phone, postAddress, message, createdAt };
 }
 
 function rand() {
@@ -73,6 +73,7 @@ const rows = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
     { id: 'email', numeric: true, disablePadding: false, label: 'Email' },
     { id: 'phone', numeric: true, disablePadding: false, label: 'Phone' },
+    { id: 'postAddress', numeric: true, disablePadding: false, label: 'Post Address' },
     { id: 'message', numeric: true, disablePadding: false, label: 'Message' },
     { id: 'createdAt', numeric: true, disablePadding: false, label: 'createdAt' },
 ];
@@ -313,6 +314,7 @@ class DataTable extends React.Component {
                         itm.name,
                         itm.email,
                         itm.phone,
+                        itm.postAddress,
                         itm.message,
                         itm.createdAt,
                     )
@@ -371,6 +373,7 @@ class DataTable extends React.Component {
                                             <TableCell component="th" scope="row" padding="none">{n.name}</TableCell>
                                             <TableCell align="right">{n.email}</TableCell>
                                             <TableCell align="right">{n.phone}</TableCell>
+                                            <TableCell align="right">{n.postAddress}</TableCell>
                                             <TableCell align="right">{n.message}</TableCell>
                                             <TableCell align="right">{n.createdAt}</TableCell>
                                         </TableRow>

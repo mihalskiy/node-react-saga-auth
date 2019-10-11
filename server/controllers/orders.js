@@ -2,12 +2,13 @@ const Order = require('../models').Orders;
 
 module.exports = {
   create(req, res) {
-      const {name, email, phone, message} = req.body;
+      const {name, email, phone, postAddress, message} = req.body;
       return Order
       .create({
           name: name,
           phone: phone,
           email: email,
+          postAddress: postAddress,
           message: message
       })
       .then((order) => res.status(201).send(order))
@@ -29,7 +30,7 @@ module.exports = {
     },
 
   update(req, res) {
-      const {name, email, phone, message} = req.body;
+      const {name, email, phone, postAddress, message} = req.body;
     return Order
       .findOne({ where: { id: req.params.id } })
       .then(order => {
@@ -43,6 +44,7 @@ module.exports = {
               name: name,
               email: email,
               phone: phone,
+              postAddress: postAddress,
               message: message
           })
           .then(() => res.status(200).send(order))
