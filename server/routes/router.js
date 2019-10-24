@@ -1,6 +1,7 @@
 const {
     user,
     order,
+    issue,
 } = require('../controllers');
 const path = require('path');
 
@@ -30,6 +31,27 @@ module.exports = (app) => {
     app.get('/order/:id',
         verifyToken,
         order.single);
+
+    // User issues routes
+    app.get('/issue',
+        verifyToken,
+        issue.list);
+
+    app.post('/issue',
+        verifyToken,
+        issue.create);
+
+    app.post('/issue/:id',
+        verifyToken,
+        issue.update);
+
+    app.post('/issue/destroy/:id',
+        verifyToken,
+        issue.destroy);
+
+    app.get('/issue/:id',
+        verifyToken,
+        issue.single);
 
   app.use((req, res) => {
     res

@@ -85,6 +85,7 @@ class DeleteProduct extends React.Component {
             name: dataById.name,
             email: dataById.email,
             phone: dataById.phone,
+            postAddress: dataById.postAddress,
             message: dataById.message,
         })
     }
@@ -97,7 +98,7 @@ class DeleteProduct extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { name, email, phone, message } = this.state;
+        const { name, email, phone, postAddress, message } = this.state;
         return (
             <main className={classes.main}>
                 <Grid className={classes.closeIcon}  alignItems="flex-end">
@@ -166,6 +167,19 @@ class DeleteProduct extends React.Component {
                                 disabled
                                 placeholder="phone"
                                 value={ phone }
+                                onChange={ (e) => this.handleChange(e) }
+                            />
+                        </FormControl>
+
+                        <FormControl margin="normal" fullWidth>
+                            <InputLabel htmlFor="password">Post Address</InputLabel>
+                            <Input
+                                type="text"
+                                name="postAddress"
+                                id="postAddress"
+                                placeholder="postAddress"
+                                disabled
+                                value={ postAddress }
                                 onChange={ (e) => this.handleChange(e) }
                             />
                         </FormControl>
