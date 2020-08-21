@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Navbar from "../components/Navbar";
 import { Route, Switch } from "react-router-dom";
@@ -36,10 +36,9 @@ const userIsAuthenticated = connectedReduxRedirect({
     redirectAction: routerActions.replace,
 })
 
-class App extends Component {
-    render() {
+const App  = (props) => {
     return (
-        <div className={this.props.classes.root}>
+        <div className={props.classes.root}>
             <Navbar/>
               <Switch>
                 <Route exact path="/" component={HomePage} />
@@ -51,7 +50,6 @@ class App extends Component {
               </Switch>
         </div>
     );
-  }
 }
 
 App.propTypes = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -57,51 +57,47 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     deleteProduct
 }, dispatch);
 
-class DeleteProduct extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: '',
-            email: '',
-            phone: '',
-            message: '',
-        }
-        this.handleChange = this.handleChange.bind(this);
+const DeleteProduct = (props) => {
+    const defaultValues = {
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
     }
 
-    handleChange = async (event) => {
+    const [value, setDefaultValues] = useState(defaultValues);
+
+    const handleChange = (event) => {
         const { target } = event;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const { name } = target;
-        await this.setState({
-            [ name ]: value,
-        });
+        setDefaultValues(prevState => ({
+            ...prevState,
+            [name]: value
+        }))
     }
 
-    componentWillMount() {
-        const { dataById } = this.props;
-        this.setState({
+    useEffect(() => {
+        const { dataById } = props;
+        setDefaultValues({
             name: dataById.name,
             email: dataById.email,
             phone: dataById.phone,
             message: dataById.message,
         })
-    }
+    }, {})
 
-    submitForm(e) {
+    const submitForm = (e) => {
         e.preventDefault();
-        this.props.deleteProduct(this.props.id)
-        this.props.closeModal();
+        props.deleteProduct(props.id)
+        props.closeModal();
     }
-
-    render() {
-        const { classes } = this.props;
-        const { name, email, phone, message } = this.state;
+     const { classes } = props;
+        const { name, email, phone, message } = value;
         return (
             <main className={classes.main}>
                 <Grid className={classes.closeIcon}  alignItems="flex-end">
-                    <IconButton aria-label="Delete" onClick={this.props.closeModal}>
+                    <IconButton aria-label="Delete" onClick={props.closeModal}>
                         <SvgIcon width={'100'}>
                             <svg viewBox="0 0 475.2 475.2">
                                 <g>
@@ -123,7 +119,7 @@ class DeleteProduct extends React.Component {
                     <Typography color={'secondary'} component="h3" variant="h5">
                         Are you sure you want to delete this product?
                     </Typography>
-                    <form className={classes.form} onSubmit={ (e) => this.submitForm(e) }>
+                    <form className={classes.form} onSubmit={ (event) => submitForm(event) }>
                         <FormControl margin="normal" disabled={true} fullWidth>
                             <InputLabel htmlFor="email">Name</InputLabel>
                             <Input
@@ -135,9 +131,7 @@ class DeleteProduct extends React.Component {
                                 placeholder="name"
                                 disabled
                                 value={ name }
-                                onChange={ (e) => {
-                                    this.handleChange(e)
-                                } }
+                                onChange={ (event) => handleChange(event)}
                             />
                         </FormControl>
                         <FormControl margin="normal" fullWidth>
@@ -151,9 +145,7 @@ class DeleteProduct extends React.Component {
                                 disabled
                                 placeholder="myemail@email.com"
                                 value={ email }
-                                onChange={ (e) => {
-                                    this.handleChange(e)
-                                } }
+                                onChange={ (event) => handleChange(event)}
                             />
 
                         </FormControl>
@@ -166,7 +158,7 @@ class DeleteProduct extends React.Component {
                                 disabled
                                 placeholder="phone"
                                 value={ phone }
-                                onChange={ (e) => this.handleChange(e) }
+                                onChange={ (event) => handleChange(event)}
                             />
                         </FormControl>
 
@@ -179,7 +171,7 @@ class DeleteProduct extends React.Component {
                                 placeholder="message"
                                 disabled
                                 value={ message }
-                                onChange={ (e) => this.handleChange(e) }
+                                onChange={ (event) => handleChange(event)}
                             />
                         </FormControl>
 
@@ -196,24 +188,15 @@ class DeleteProduct extends React.Component {
                 </Paper>
             </main>
         );
-    }
-
-
 }
 
 DeleteProduct.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = function (state) {
-    return {
-        //data: state.product.result.data,
-    }
-};
-
 export default compose(
     withStyles(styles, {
         name: 'AppFrame',
     }),
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(null, mapDispatchToProps),
 )(DeleteProduct);

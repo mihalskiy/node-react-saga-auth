@@ -42,7 +42,7 @@ const styles = theme =>  ({
 
 const WithState = toRenderProps(withState('anchorEl', 'updateAnchorEl', null));
 
-function RenderPropsMenu(classes) {
+const RenderPropsMenu = (classes) => {
     return (
         <WithState>
             {({ anchorEl, updateAnchorEl }) => {
@@ -86,16 +86,15 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     userCreate,
 }, dispatch);
 
-class Navbar extends React.Component {
-    render() {
-        const { classes, isAuth } = this.props;
-        const Register = props => <RouterLink to="/register" {...props} />;
-        const Login = props => <RouterLink to="/login" {...props} />;
-        const Home = props => <RouterLink to="/" {...props} />;
-        const Product = props => <RouterLink to="/product" {...props} />;
+const Navbar = (props) => {
+    const { classes, isAuth } = props;
+    const Register = props => <RouterLink to="/register" {...props} />;
+    const Login = props => <RouterLink to="/login" {...props} />;
+    const Home = props => <RouterLink to="/" {...props} />;
+    const Product = props => <RouterLink to="/product" {...props} />;
 
     return (
-        <React.Fragment>
+        <>
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" color="inherit" className={classes.grow} component={Home}>
@@ -121,16 +120,14 @@ class Navbar extends React.Component {
                     }
                 </Toolbar>
             </AppBar>
-        </React.Fragment>
+        </>
     )}
-
-}
 
 Navbar.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = function (state) {
+const mapStateToProps = (state) => {
     return {
         isAuth: state.auth.isAuth
     }

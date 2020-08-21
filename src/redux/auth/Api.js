@@ -1,14 +1,14 @@
 const apiInsertNewUser =  process.env.PUBLIC_URL ? process.env.PUBLIC_URL + '/sign-up' : 'http://localhost:8080/sign-up';
 const apiEnterUser =  process.env.PUBLIC_URL ? process.env.PUBLIC_URL + '/sign-in' :'http://localhost:8080/sign-in';
 
-const  insertNewUser = user => {
+const insertNewUser = user => {
     const config = {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user.payload.data)
+        body: JSON.stringify(user)
     };
 
     const status = (response) => {
@@ -25,6 +25,7 @@ const  insertNewUser = user => {
         .then(json)
         .catch(error => {
            console.error(`'Request failed', ${error}`)
+            throw new Error(error.message)
         })
 
 }
@@ -37,17 +38,18 @@ const loginUser = async user => {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(user.payload.data)
+                body: JSON.stringify(user)
             };
-
             const response = await fetch(apiEnterUser, config);
-
-            if (response.ok) {
-                return response.json()
+            if (response.status >= 200 && response.status < 300) {
+                return Promise.resolve(response.json())
             }
+            const result = await response.json();
 
-        } catch (e) {
-            console.error(e)
+            return Promise.reject(new Error(result.message))
+        } catch (error) {
+
+            return error
         }
 };
 

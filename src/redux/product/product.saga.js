@@ -1,17 +1,14 @@
-import { put, takeLatest, all } from 'redux-saga/effects';
+import {put, takeLatest, all, call} from 'redux-saga/effects';
 import {getProductSuccess} from './product.action';
 import actionTypes from "./product.action";
 import {Api} from "../product/Api";
 
 function* getProductSaga() {
     try {
-        const result = yield Api.getProducts();
-
-        if (result) {
-            yield put(getProductSuccess({
-                result
-            }));
-        }
+        const result = yield call(Api.getProducts);
+        yield put(getProductSuccess({
+            result
+        }));
 
     } catch (e) {
         yield put({ type: actionTypes.GET_PRODUCT_FAILED, e });
@@ -21,10 +18,8 @@ function* getProductSaga() {
 
 function* postProductSaga(payload) {
     try {
-        const result = yield Api.insertNewProduct(payload);
-        if (result.ok) {
-            yield put({ type: actionTypes.GET_PRODUCT });
-        }
+        yield call(Api.insertNewProduct, payload);
+        yield put({ type: actionTypes.GET_PRODUCT });
     } catch (e) {
         yield put({ type: actionTypes.GET_PRODUCT_FAILED, e });
         console.error(`Error is : ${e}`);
@@ -33,10 +28,8 @@ function* postProductSaga(payload) {
 
 function* editProductSaga(payload) {
     try {
-        const result = yield Api.updateProduct(payload);
-        if (result.ok) {
-            yield put({ type: actionTypes.GET_PRODUCT });
-        }
+        yield call(Api.updateProduct, payload);
+        yield put({ type: actionTypes.GET_PRODUCT });
     } catch (e) {
         yield put({ type: actionTypes.GET_PRODUCT_FAILED, e });
         console.error(`Error is : ${e}`);
@@ -45,10 +38,8 @@ function* editProductSaga(payload) {
 
 function* deleteProductSaga(payload) {
     try {
-        const result = yield Api.deleteProduct(payload);
-        if (result.ok) {
-            yield put({ type: actionTypes.GET_PRODUCT });
-        }
+        yield call(Api.deleteProduct, payload);
+        yield put({ type: actionTypes.GET_PRODUCT });
     } catch (e) {
         yield put({ type: actionTypes.GET_PRODUCT_FAILED, e });
         console.error(`Error is : ${e}`);
@@ -57,13 +48,11 @@ function* deleteProductSaga(payload) {
 
 function* getByIdProductSaga(payload) {
     try {
-        const result = yield Api.getByIdProduct(payload);
-        if (result.ok) {
-            document.location.reload(true);
-            yield put(getProductSuccess({
-                result
-            }));
-        }
+        const result = yield call(Api.getByIdProduct, payload);
+        document.location.reload(true);
+        yield put(getProductSuccess({
+            result
+        }));
     } catch (e) {
         yield put({ type: actionTypes.GET_PRODUCT_FAILED, e });
         console.error(`Error is : ${e}`);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {bindActionCreators, compose} from "redux";
 import {connect} from "react-redux";
-import {editProduct, getIDProduct, getProduct} from "../redux/product/product.action";
+import {editProduct, getProduct} from "../redux/product/product.action";
 import IconButton from "@material-ui/core/IconButton";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import Grid from "@material-ui/core/Grid";
@@ -60,54 +60,54 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     editProduct
 }, dispatch)
 
-class EditProduct extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: '',
-            email: '',
-            phone: '',
-            message: '',
-        }
-        this.handleChange = this.handleChange.bind(this);
+const EditProduct = (props) => {
+    const defaultValues = {
+        name: '',
+        email: '',
+        phone: '',
+        message: '',
     }
 
-    handleChange = async (event) => {
-        const { target } = event;
+    const [value, setDefaultValues] = useState(defaultValues);
+
+    const onChange = (event) => {
+        event.preventDefault();
+
+        const {target} = event;
         const value = target.type === 'checkbox' ? target.checked : target.value;
-        const { name } = target;
-        await this.setState({
-            [ name ]: value,
-        });
+        const {name} = target;
+        setDefaultValues(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     }
 
-    componentWillMount() {
-        const { dataById } = this.props;
-        this.setState({
+    const submitForm = (e) => {
+        e.preventDefault();
+        props.editProduct({
+            id: props.id,
+            data: value
+        })
+        props.closeModal();
+    }
+
+    useEffect(() => {
+        const { dataById } = props;
+
+        setDefaultValues({
             name: dataById.name,
             email: dataById.email,
             phone: dataById.phone,
             message: dataById.message,
         })
-    }
+    }, {});
 
-    submitForm(e) {
-        e.preventDefault();
-        this.props.editProduct({
-            id: this.props.id,
-            data: this.state
-        })
-        this.props.closeModal();
-    }
-
-    render() {
-        const { classes } = this.props;
-        const { name, email, phone, message } = this.state;
+    const { classes } = props;
+    const { name, email, phone, message } = value;
         return (
             <main className={classes.main}>
-                <Grid className={classes.closeIcon}  alignItems="flex-end">
-                    <IconButton aria-label="Delete" onClick={this.props.closeModal}>
+                <Grid className={classes.closeIcon}  alignItems="container">
+                    <IconButton aria-label="Delete" onClick={props.closeModal}>
                         <SvgIcon width={'100'}>
                             <svg viewBox="0 0 475.2 475.2">
                                 <g>
@@ -128,7 +128,7 @@ class EditProduct extends React.Component {
                     <Typography component="h1" variant="h5">
                         Edit Product
                     </Typography>
-                    <form className={classes.form} onSubmit={ (e) => this.submitForm(e) }>
+                    <form className={classes.form} onSubmit={ event => submitForm(event) }>
                         <FormControl margin="normal" fullWidth>
                             <InputLabel htmlFor="email">Name</InputLabel>
                             <Input
@@ -139,9 +139,7 @@ class EditProduct extends React.Component {
                                 id="name"
                                 placeholder="name"
                                 value={ name }
-                                onChange={ (e) => {
-                                    this.handleChange(e)
-                                } }
+                                onChange={event => onChange(event)}
                             />
                         </FormControl>
                         <FormControl margin="normal" fullWidth>
@@ -154,9 +152,7 @@ class EditProduct extends React.Component {
                                 id="exampleEmail"
                                 placeholder="myemail@email.com"
                                 value={ email }
-                                onChange={ (e) => {
-                                    this.handleChange(e)
-                                } }
+                                onChange={event => onChange(event)}
                             />
 
                         </FormControl>
@@ -169,7 +165,7 @@ class EditProduct extends React.Component {
                                 placeholder="phone"
                                 required
                                 value={ phone }
-                                onChange={ (e) => this.handleChange(e) }
+                                onChange={event => onChange(event)}
                             />
                         </FormControl>
 
@@ -182,7 +178,7 @@ class EditProduct extends React.Component {
                                 placeholder="message"
                                 required
                                 value={ message }
-                                onChange={ (e) => this.handleChange(e) }
+                                onChange={event => onChange(event)}
                             />
                         </FormControl>
 
@@ -199,9 +195,6 @@ class EditProduct extends React.Component {
                 </Paper>
             </main>
         );
-    }
-
-
 }
 
 EditProduct.propTypes = {

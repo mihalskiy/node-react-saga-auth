@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -25,11 +25,6 @@ import {bindActionCreators, compose} from "redux";
 import {editProduct, getProduct} from "../redux/product/product.action";
 import {connect} from "react-redux";
 
-
-function createData(id, name, email, phone, message, createdAt) {
-    return { id, name, email, phone, message, createdAt };
-}
-
 function rand() {
     return Math.round(Math.random() * 20) - 10;
 }
@@ -44,31 +39,6 @@ function getModalStyle() {
         transform: `translate(-${top}%, -${left}%)`,
     };
 }
-
-function desc(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-        return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-        return 1;
-    }
-    return 0;
-}
-
-function stableSort(array, cmp) {
-    const stabilizedThis = array.map((el, index) => [el, index]);
-    stabilizedThis.sort((a, b) => {
-        const order = cmp(a[0], b[0]);
-        if (order !== 0) return order;
-        return a[1] - b[1];
-    });
-    return stabilizedThis.map(el => el[0]);
-}
-
-function getSorting(order, orderBy) {
-    return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
-}
-
 const rows = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
     { id: 'email', numeric: true, disablePadding: false, label: 'Email' },
@@ -182,7 +152,7 @@ let EnhancedTableToolbar = props => {
                                 onClose={props.closeModal}
                             >
                                 <div style={getModalStyle()} className={classes.paper}>
-                                    <AddProduct id={props.id} data={props.data} closeModal={props.closeModal}/>
+                                    <AddProduct id={props.id} data={props.productList} closeModal={props.closeModal}/>
                                 </div>
                             </Modal>
                             <Modal
@@ -236,11 +206,11 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     editProduct
 }, dispatch)
 
-class DataTable extends React.Component {
-    state = {
+const DataTable = (props) => {
+    const defaultValues = {
         order: 'asc',
         orderBy: 'email',
-        data: [],
+        productList: [],
         page: 0,
         rowsPerPage: 5,
         id: null,
@@ -250,158 +220,162 @@ class DataTable extends React.Component {
         isDelete: false
     };
 
-    handleRequestSort = (event, property) => {
+    const [value, setDefaultValues] = useState(defaultValues);
+
+    const handleRequestSort = (event, property) => {
         const orderBy = property;
         let order = 'desc';
 
-        if (this.state.orderBy === property && this.state.order === 'desc') {
+        if (value.orderBy === property && value.order === 'desc') {
             order = 'asc';
         }
 
-        this.setState({ order, orderBy });
+        setDefaultValues(prevState =>({
+            ...prevState,
+            order,
+            orderBy
+        }));
     };
 
-    handleClick = (event, id) => {
-
+    const handleChangePage = (event, page) => {
+        setDefaultValues(prevState =>({
+            ...prevState,
+            page,
+        }));
     };
 
-    handleChangePage = (event, page) => {
-        this.setState({ page });
+    const handleChangeRowsPerPage = event => {
+        setDefaultValues(prevState =>({
+            ...prevState,
+            rowsPerPage: event.target.value,
+        }));
     };
 
-    handleChangeRowsPerPage = event => {
-        this.setState({ rowsPerPage: event.target.value });
-    };
-
-    handleAddModal = () => {
-        this.setState({
+    const handleAddModal = () => {
+        setDefaultValues(prevState =>({
+            ...prevState,
             isAdd: true
-        });
+        }));
     };
 
-    closeModal = () => {
-        this.setState({
+    const closeModal = () => {
+        setDefaultValues(prevState =>({
+            ...prevState,
             isAdd: false,
             isEdit: false,
             isDelete: false
-        });
+        }));
     };
 
-    editProduct = (e, id, data) => {
-        this.setState({
+    const editProduct = (e, id, data) => {
+        setDefaultValues(prevState =>({
+            ...prevState,
             isEdit: true,
             id: id,
             dataById: data
-        });
+        }));
     };
 
-    deleteProduct = (e, id, data) => {
-        this.setState({
+    const deleteProduct = (e, id, data) => {
+        setDefaultValues(prevState =>({
+            ...prevState,
             isDelete: true,
             id: id,
             dataById: data
-        });
+        }));
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.data !== this.props.data) {
-            this.state.data = [];
-            nextProps.data.forEach((itm) => {
-                this.state.data.push(
-                    createData(
-                        itm.id,
-                        itm.name,
-                        itm.email,
-                        itm.phone,
-                        itm.message,
-                        itm.createdAt,
-                    )
-                )
-            })
+    useEffect(() => {
+        setDefaultValues(prevState => ({
+            ...prevState,
+            productList: [],
+        }));
+        if (props.productList && props.productList.length) {
+            setDefaultValues(prevState => ({
+                ...prevState,
+                productList: props.productList,
+            }));
 
         }
-    }
 
 
-    render() {
-        const { classes } = this.props;
-        const { data, dataById, order, isAdd, orderBy, rowsPerPage, page, isEdit,isDelete, id } = this.state;
-        const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+    }, [props.productList])
 
-        return (
-            <Paper className={classes.root}>
-                <EnhancedTableToolbar
-                    isAdd={isAdd}
-                    isEdit={isEdit}
-                    isDelete={isDelete}
-                    id={id}
-                    data={data}
-                    dataById={dataById}
-                    closeModal={this.closeModal}
-                    handleAddModal={this.handleAddModal} />
-                <div className={classes.tableWrapper}>
-                    <Table className={classes.table} aria-labelledby="tableTitle">
-                        <EnhancedTableHead
-                            order={order}
-                            orderBy={orderBy}
-                            onRequestSort={this.handleRequestSort}
-                            rowCount={data.length}
-                        />
-                        <TableBody>
-                            {stableSort(data, getSorting(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
-                                    return (
-                                        <TableRow
-                                            hover
-                                            onClick={event => this.handleClick(event, n.id)}
-                                            role="checkbox"
-                                            key={n.id}
-                                        >
-                                            <TableCell padding="checkbox">
-                                                <IconButton aria-label="Edit Product" onClick={event => this.editProduct(event, n.id, n)}>
-                                                    <EditIcon color={'primary'} />
-                                                </IconButton>
+    const { classes } = props;
+    const { productList, dataById, order, isAdd, orderBy, rowsPerPage, page, isEdit,isDelete, id } = value;
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, productList.length - page * rowsPerPage);
+
+    return (
+        <Paper className={classes.root}>
+            <EnhancedTableToolbar
+                isAdd={isAdd}
+                isEdit={isEdit}
+                isDelete={isDelete}
+                id={id}
+                data={productList}
+                dataById={dataById}
+                closeModal={closeModal}
+                handleAddModal={handleAddModal} />
+            <div className={classes.tableWrapper}>
+                <Table className={classes.table} aria-labelledby="tableTitle">
+                    <EnhancedTableHead
+                        order={order}
+                        orderBy={orderBy}
+                        onRequestSort={handleRequestSort}
+                        rowCount={productList.length}
+                    />
+                    <TableBody>
+                        {productList && productList.map(n => {
+                                return (
+                                    <TableRow
+                                        hover
+                                        onClick={event => this.handleClick(event, n.id)}
+                                        role="checkbox"
+                                        key={n.id}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <IconButton aria-label="Edit Product" onClick={event => editProduct(event, n.id, n)}>
+                                                <EditIcon color={'primary'} />
+                                            </IconButton>
 
 
-                                                <IconButton aria-label="Delete Product" onClick={event => this.deleteProduct(event, n.id, n)}>
-                                                    <DeleteIcon color={'secondary'} />
-                                                </IconButton>
-                                            </TableCell>
-                                            <TableCell component="th" scope="row" padding="none">{n.name}</TableCell>
-                                            <TableCell align="right">{n.email}</TableCell>
-                                            <TableCell align="right">{n.phone}</TableCell>
-                                            <TableCell align="right">{n.message}</TableCell>
-                                            <TableCell align="right">{n.createdAt}</TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 49 * emptyRows }}>
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={data.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    backIconButtonProps={{
-                        'aria-label': 'Previous Page',
-                    }}
-                    nextIconButtonProps={{
-                        'aria-label': 'Next Page',
-                    }}
-                    onChangePage={this.handleChangePage}
-                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />
-            </Paper>
-        );
-    }
+                                            <IconButton aria-label="Delete Product" onClick={event => deleteProduct(event, n.id, n)}>
+                                                <DeleteIcon color={'secondary'} />
+                                            </IconButton>
+                                        </TableCell>
+                                        <TableCell component="th" scope="row" padding="none">{n.name}</TableCell>
+                                        <TableCell align="right">{n.email}</TableCell>
+                                        <TableCell align="right">{n.phone}</TableCell>
+                                        <TableCell align="right">{n.message}</TableCell>
+                                        <TableCell align="right">{n.createdAt}</TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        {emptyRows > 0 && (
+                            <TableRow style={{ height: 49 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={productList.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                backIconButtonProps={{
+                    'aria-label': 'Previous Page',
+                }}
+                nextIconButtonProps={{
+                    'aria-label': 'Next Page',
+                }}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+        </Paper>
+    );
 }
 
 DataTable.propTypes = {
@@ -410,7 +384,7 @@ DataTable.propTypes = {
 
 const mapStateToProps = function (state) {
     return {
-        data: state.product.result
+        productList: state.product.result
     }
 };
 

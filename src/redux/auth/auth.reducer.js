@@ -17,9 +17,7 @@ function reducer(state = initialState.auth, action = {}) {
         case actionTypes.USER_SUCCESS:
             return state.merge({
                 loading: true,
-                payload: {
-                    ...payload
-                }
+                ...payload
         });
         case actionTypes.USER_FAILED:
             return state.merge({

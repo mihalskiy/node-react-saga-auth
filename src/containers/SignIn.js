@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from "react-redux";
 import {bindActionCreators, compose} from "redux";
 import PropTypes from 'prop-types';
@@ -52,113 +52,96 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     userCreateFailed
 }, dispatch);
 
-class SignIn extends React.Component {
+const SignIn = (props) => {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            'email': '',
-            'password': '',
-        };
-        this.handleChange = this.handleChange.bind(this);
+    const defaultValues = {
+        password: '',
+        email: '',
     }
-
-    handleChange = async (event) => {
+    const [value, setDefaultValues] = useState(defaultValues);
+    const { classes } = props;
+    const { email, password } = value;
+    const handleChange =  (event) => {
         const { target } = event;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const { name } = target;
-        await this.setState({
+        setDefaultValues(prevState => ({
+            ...prevState,
             [ name ]: value,
-        });
+        }));
     }
-
-    componentWillReceiveProps(nextProps, nextContext) {
-
-        if(nextProps.successAuth !== nextContext.successAuth){
-            const { token } = nextProps.successAuth.data;
-            const { isAuth } = nextProps.successAuth.data;
+    const submitForm = (event) => {
+        event.preventDefault();
+        props.userEnter(value)
+    }
+    useEffect(()=> {
+        if (props.successAuth.token) {
+            const { token, isAuth } = props.successAuth;
             localStorage.setItem('token', token);
             localStorage.setItem('isAuth', isAuth);
             window.location.replace( '/product');
         }
-
-
-
-    }
-
-    submitForm(e) {
-        e.preventDefault();
-        this.props.userEnter(this.state)
-    }
-
-    render() {
-        const { classes, err } = this.props;
-        const { email, password } = this.state;
-        return (
-            <main className={classes.main}>
-                <CssBaseline />
-                <Paper className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
+    }, [props.successAuth.token])
+    return (
+        <main className={classes.main}>
+            <CssBaseline />
+            <Paper className={classes.paper}>
+                <Avatar className={classes.avatar}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Sign in
+                </Typography>
+                <form className={classes.form} onSubmit={ (event) => submitForm(event) }>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="email">Email Address</InputLabel>
+                        <Input
+                            type="email"
+                            name="email"
+                            id="email"
+                            placeholder="myemail@email.com"
+                            value={ email }
+                            required
+                            onChange={ (event) => handleChange(event)}
+                        />
+                    </FormControl>
+                    <FormControl margin="normal" required fullWidth>
+                        <InputLabel htmlFor="password">Password</InputLabel>
+                        <Input
+                            type="password"
+                            name="password"
+                            id="password"
+                            placeholder="********"
+                            value={ password }
+                            onChange={ (event) => handleChange(event)}
+                        />
+                    </FormControl>
+                    {props.errorMessage &&
+                        <InputLabel error>{props.errorMessage}</InputLabel>
+                    }
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                    >
                         Sign in
-                    </Typography>
-                    <form className={classes.form} onSubmit={ (e) => this.submitForm(e) }>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="email">Email Address</InputLabel>
-                            <Input
-                                type="email"
-                                name="email"
-                                id="email"
-                                placeholder="myemail@email.com"
-                                value={ email }
-                                required
-                                onChange={ (e) => {
-                                    this.handleChange(e)
-                                } }
-                            />
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel htmlFor="password">Password</InputLabel>
-                            <Input
-                                type="password"
-                                name="password"
-                                id="password"
-                                placeholder="********"
-                                value={ password }
-                                onChange={ (e) => this.handleChange(e) }
-                            />
-                            { err && err.e &&
-                            <React.Fragment>
-                                <h6 color={'primary'} >SOMETHING ERROR</h6>
-                            </React.Fragment>
-                            }
-                        </FormControl>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            Sign in
-                        </Button>
-                    </form>
-                </Paper>
-            </main>
-        );
-    }
+                    </Button>
+                </form>
+            </Paper>
+        </main>
+    );
 }
 
 SignIn.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = function (state) {
+const mapStateToProps = (state) => {
     return {
-        err: state.auth.payload,
-        successAuth: state.auth.payload,
+        errorMessage: state.auth.errorMessage,
+        successAuth: state.auth,
     }
 };
 

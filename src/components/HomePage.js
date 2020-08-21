@@ -1,20 +1,12 @@
 import React from 'react';
 
-class HomePage extends React.Component {
+const  HomePage = () => {
+    return (
+        <>
+            <h1>React Slingshot</h1>
+        </>
 
-
-    render() {
-        return (
-            <React.Fragment>
-                <div>
-                    <h1>React Slingshot</h1>
-                </div>
-            </React.Fragment>
-
-        );
-    }
-
-
+    );
 };
 
 export default HomePage;
